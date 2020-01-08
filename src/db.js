@@ -1,23 +1,19 @@
 import mongoose from 'mongoose'
 import session from 'express-session'
 import ConnectMongo from 'connect-mongo'
+import sander from 'sander'
+import path from 'path'
+
+sander.readdir(path.join('src/schemas')).then(dirs=>{
+    dirs.forEach(dir=>{
+        //require(`./schemas/${dir}`)
+        import(`./schemas/${dir}`)
+    })
+})
 
 const MongoStore = ConnectMongo(session)
-
 const mongoURI = process.env.MONGO_URI || 'mongodb://root:example@localhost:27017/pl2?authSource=admin';
 mongoose.connect(mongoURI, { useNewUrlParser: true });
-
-var userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String
-});
-var User = mongoose.model('user', userSchema);
-
-var kittySchema = new mongoose.Schema({
-    name: String
-});
-var Kitten = mongoose.model('Kitten', kittySchema);
 
 export default {
     
@@ -26,11 +22,8 @@ export default {
 const singleton = {
     collection(name){
         return {
-            async create(payload){
-                return await mongoose.model(name).create(payload)
-            },
-            async read(){
-                return await mongoose.model(name).find({}).lean(true)
+            model(){
+                return mongoose.model(name)
             }
         }
     }
@@ -39,6 +32,7 @@ const singleton = {
 export function dbMiddleware(){
     return function(req,res,next){
         req.db = singleton
+        req.model = name => mongoose.model(name)
         next();
     }
 }

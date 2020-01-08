@@ -1,8 +1,10 @@
+import dotenv from 'dotenv'
+dotenv.config({silent:true})
 import express from 'express'
 import {default as db, sessionMiddleware, dbMiddleware} from './db.js'
 import jwt  from './jwt.js';
+import { createRequire } from 'module';
 
-import usersApi from './routes/user.js';
 
 const app = express()
 const port = 3000
@@ -12,9 +14,13 @@ app.use(express.json({
 }))
 
 app.use(dbMiddleware())
-
 app.use(sessionMiddleware())
 
+import('./crud.js').then(module=>module.default(app))
+import('./funql.js').then(module=>module.default(app))
+
+
+/*
 app.get('/', async (req, res) => {
     
     req.session.jwt_token = await jwt.sign({
@@ -39,6 +45,6 @@ app.get('/jwt/token', async (req, res) => {
 app.post('/post', async (req, res) => {
     console.log(req.body)
     res.send('Hello World! '+JSON.stringify(req.body))
-})
+})*/
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
