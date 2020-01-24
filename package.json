@@ -1,31 +1,34 @@
 {
-  "name": "pl2-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "npx nodemon --exec 'DEBUG=funql* node src/index.js' -e js --watch src",
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "connect-mongo": "^3.2.0",
-    "debug": "^4.1.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "funql-api": "^1.2.3",
-    "jsonwebtoken": "^8.5.1",
-    "md5": "^2.2.1",
-    "mongoose": "^5.8.4",
-    "node-mailjet": "^3.3.1",
-    "pluralize": "^8.0.0",
-    "sander": "^0.6.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.2"
-  }
+    "name": "pl2-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "npx nodemon --exec 'DEBUG=funql* node src/index.js' -e js --watch src",
+        "start": "node src/index.js",
+        "docs": "npx nodemon --exec 'npx jsdoc -t node_modules/docdash -c jsdoc.json' -e js --watch src/routes",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "connect-mongo": "^3.2.0",
+        "debug": "^4.1.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-session": "^1.17.0",
+        "funql-api": "^1.2.3",
+        "jsdoc": "^3.6.3",
+        "jsonwebtoken": "^8.5.1",
+        "md5": "^2.2.1",
+        "mongoose": "^5.8.4",
+        "node-mailjet": "^3.3.1",
+        "pluralize": "^8.0.0",
+        "sander": "^0.6.0"
+    },
+    "devDependencies": {
+        "docdash": "^1.1.1",
+        "nodemon": "^2.0.2"
+    }
 }
