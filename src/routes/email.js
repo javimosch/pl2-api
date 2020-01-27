@@ -53,9 +53,18 @@ export default {
                     Variables: user,
                 }]
             }
-            const mailjet_response = await mailjet
-                .post("send")
-                .request(mailjet_request)
+            let mailjet_response = {
+                response: {
+                    text: {
+                        test: true
+                    }
+                }
+            }
+            if (process.env.NODE_ENV === 'production') {
+                mailjet_response = await mailjet
+                    .post("send")
+                    .request(mailjet_request)
+            }
 
 
 

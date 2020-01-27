@@ -4,33 +4,39 @@ import ConnectMongo from 'connect-mongo'
 import sander from 'sander'
 import path from 'path'
 
-sander.readdir(path.join('src/schemas')).then(dirs=>{
-    dirs.forEach(dir=>{
-        //require(`./schemas/${dir}`)
-        import(`./schemas/${dir}`)
-    })
-})
+var MongoStore;
+var mongoURI;
 
-const MongoStore = ConnectMongo(session)
-const mongoURI = process.env.MONGO_URI || 'mongodb://root:example@localhost:27017/pl2?authSource=admin';
-mongoose.connect(mongoURI, { useNewUrlParser: true });
+export function init() {
+    sander.readdir(path.join('src/schemas')).then(dirs => {
+        dirs.forEach(dir => {
+            //require(`./schemas/${dir}`)
+            import (`./schemas/${dir}`)
+        })
+    })
+
+    MongoStore = ConnectMongo(session)
+    mongoURI = process.env.MONGO_URI
+    if (!mongoURI) throw new Error('MONGO_URI')
+    mongoose.connect(mongoURI, { useNewUrlParser: true });
+}
 
 export default {
-    
+    init
 }
 
 const singleton = {
-    collection(name){
+    collection(name) {
         return {
-            model(){
+            model() {
                 return mongoose.model(name)
             }
         }
     }
 }
 
-export function dbMiddleware(){
-    return function(req,res,next){
+export function dbMiddleware() {
+    return function(req, res, next) {
         req.db = singleton
         req.model = name => mongoose.model(name)
         next();
@@ -38,7 +44,7 @@ export function dbMiddleware(){
 }
 
 export function sessionMiddleware() {
-    
+
     const mongoStoreOptions = {
         url: mongoURI,
         //mongoOptions: advancedOptions // See below for details

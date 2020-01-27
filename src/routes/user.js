@@ -24,10 +24,13 @@ export default {
          * 
          */
         async registerAccount(data) {
+            console.log(data)
             let result = await this.req.model('user').findOneAndUpdate({
                 email: data.email
             }, {
-                $set: data
+                $set: {
+                    email: data.email
+                }
             }, {
                 new: true,
                 upsert: true,
@@ -38,16 +41,32 @@ export default {
                 await this.req.action('email.sendAccountRegisteredNotification')(result.value)
             }
             return result
+        },
+        async createUser(data) {
+            const model = (this.db || this.req.db).collection('user').model();
+
+            await model.updateOne({
+                email: data.email
+            }, {
+                $set: {
+                    ... { email: data.email },
+                    password: md5(data.password)
+                }
+            }, {
+                upsert: true,
+                setDefaultsOnInsert: true
+            })
+            let user = await model.findOne({
+                email: data.email
+            }).select("_id email")
+            return user
         }
     },
     /**
      * 
      */
     async collection_create(req, res) {
-        res.json(await req.db.collection('user').model().create({
-            ...req.body,
-            password: md5(req.body.password)
-        }))
+        return res.json(await req.action('user.createUser')(req.body))
     },
     /**
      * 

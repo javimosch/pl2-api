@@ -1,23 +1,34 @@
 import dotenv from 'dotenv'
-dotenv.config({silent:true})
 import express from 'express'
-import {default as db, sessionMiddleware, dbMiddleware} from './db.js'
-import jwt  from './jwt.js';
+import { default as db, sessionMiddleware, dbMiddleware } from './db.js'
+import jwt from './jwt.js';
 import { createRequire } from 'module';
+import cors from 'cors'
+dotenv.config({ silent: true })
 
+db.init();
 
 const app = express()
 const port = 3000
 
+
+app.use(cors())
+
 app.use(express.json({
-    limit:"100mb"
+    limit: "100mb"
 }))
+
+app.get('/alive', (req, res) => {
+    res.json({
+        ok: true
+    })
+})
 
 app.use(dbMiddleware())
 app.use(sessionMiddleware())
 
-import('./crud.js').then(module=>module.default(app))
-import('./funql.js').then(module=>module.default(app))
+import ('./crud.js').then(module => module.default(app))
+import ('./funql.js').then(module => module.default(app))
 
 
 /*

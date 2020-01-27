@@ -16,7 +16,8 @@ export default async function(app) {
                 if (typeof root === "function") {
                     return function() {
                         return root.apply({
-                                req
+                                req,
+                                db: req.db
                             },
                             arguments
                         );
