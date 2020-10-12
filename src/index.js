@@ -1,3 +1,7 @@
+import {default as dotenv} from 'dotenv'
+dotenv.config({
+    silent:true
+})
 import express from 'express'
 import {default as db, sessionMiddleware, dbMiddleware} from './db.js'
 import jwt  from './jwt.js';

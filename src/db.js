@@ -5,6 +5,9 @@ import ConnectMongo from 'connect-mongo'
 const MongoStore = ConnectMongo(session)
 
 const mongoURI = process.env.MONGO_URI || 'mongodb://root:example@localhost:27017/pl2?authSource=admin';
+
+console.log("mongoURI",mongoURI)
+
 mongoose.connect(mongoURI, { useNewUrlParser: true });
 
 var userSchema = new mongoose.Schema({
