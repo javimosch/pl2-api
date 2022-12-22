@@ -21,7 +21,7 @@
         "express-session": "^1.17.0",
         "funql-api": "^1.2.3",
         "jsdoc": "^3.6.3",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "md5": "^2.2.1",
         "mongoose": "^5.8.4",
         "node-mailjet": "^3.3.1",
